@@ -11,13 +11,18 @@ def leaftraits():
     return 1
 
 def download_data_from_github():
+    
     data_path = Path("data/01_raw")
     image_path = data_path / "train_images"
+    train_path = data_path / "train.csv"
+    
     if image_path.is_dir():
         print(f"{image_path} directory exists.")
+    
     else:
         print(f"Did not find {image_path} directory, downloading from GitHub...")
         fs = fsspec.filesystem("github", org="szefer-piotr", repo="ltdata")
-        fs.get(fs.ls("train_data"), image_path.as_posix(), recursive=True)
-        fs.get("train.csv", data_path.as_posix())
+        fs.get(fs.ls("train_images"), image_path.as_posix(), recursive=True)
+        fs.get("train.csv", train_path.as_posix())
+    
     return 1
