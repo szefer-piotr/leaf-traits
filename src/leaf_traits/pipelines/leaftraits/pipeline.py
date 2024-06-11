@@ -4,15 +4,15 @@ generated using Kedro 0.19.6
 """
 
 from kedro.pipeline import Pipeline, pipeline, node
-from .nodes import leaftraits
+from .nodes import download_data_from_github
 
 
 def create_pipeline(**kwargs) -> Pipeline:
     return pipeline([
         node(
-            name="hello",
+            name="download_data",
             inputs=None,
-            outputs="not important",
-            func=leaftraits
+            outputs="Dataset",
+            func=download_data_from_github
         )
     ])
