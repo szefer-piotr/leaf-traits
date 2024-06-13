@@ -42,10 +42,10 @@ def train_validation_split(train_serialized, val_size:int, random_state:int):
     # data = pd.read_pickle(train_serialized_path)
     print(type(train_serialized))
 
-    train0 = train_serialized.load()
+    # train0 = train_serialized.load()
 
     train, val = train_test_split(
-        train0, 
+        train_serialized, 
         test_size=val_size, 
         shuffle=True, 
         random_state=random_state
