@@ -1,1 +1,1 @@
-{"train_raw": {"rows": 278, "columns": 177, "file_size": 402476}}
+{"train_raw": {"rows": 278, "columns": 177, "file_size": 402476}, "train": {"rows": 232, "columns": 177, "file_size": 337553}, "val": {"rows": 46, "columns": 177, "file_size": 72641}}

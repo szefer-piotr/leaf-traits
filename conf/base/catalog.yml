@@ -2,6 +2,11 @@ train_raw:
   type: pandas.CSVDataset
   filepath: data/01_raw/train.csv
 
+train_serialized:
+  type: pickle.PickleDataset
+  filepath: data/02_intermediate/train_bytes.pkl
+  backend: pickle
+
 train:
   type: pandas.CSVDataset
   filepath: data/02_intermediate/train.csv

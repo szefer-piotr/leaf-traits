@@ -31,21 +31,35 @@ def download_data_from_github():
 
 
 
-def train_validation_split(train_raw, val_size, random_state):
+def train_validation_split(train_bytes, val_size, random_state):
     '''
     Uploads tabular train data
     '''
     train, val = train_test_split(
-        train_raw, 
+        train_bytes, 
         test_size=val_size, 
         shuffle=True, 
         random_state=random_state
     )
+
     train = train.reset_index(drop=True)
     val = val.reset_index(drop=True)
     print(f"Train shape: {train.shape}\nValidation shape: {val.shape}")
     return train, val
 
 
-def binarize_images():
-    pass
+def serialize_images(train_raw:pd.DataFrame, image_path:str):
+    '''Reads an image file path from the raw data, then opens the corresponding image based on its id and writes it in a new column as bytes.
+
+    Args:
+        train_raw (pd.DataFrame): Raw train dataset.
+        image_path (str): Path to the folder containing the images.
+
+    Returns:
+        Returns serialized train dataset as pickle format.
+    '''
+    
+    train_raw['file_path'] = train_raw['id'].apply(lambda s: f'{image_path}/{s}.jpeg')
+    train_raw['jpeg_bytes'] = train_raw['file_path'].apply(lambda fp: open(fp, 'rb').read())
+    
+    return train_raw.to_pickle
