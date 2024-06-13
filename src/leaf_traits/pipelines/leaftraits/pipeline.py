@@ -27,7 +27,7 @@ def create_pipeline(**kwargs) -> Pipeline:
         ),
         node(
             name="train_val_split",
-            inputs=["train_raw", "params:N_VAL_SAMPLES", "params:SEED"],
+            inputs=["train_serialized", "params:N_VAL_SAMPLES", "params:SEED"],
             outputs=["train","val"],
             func=train_validation_split,
         )

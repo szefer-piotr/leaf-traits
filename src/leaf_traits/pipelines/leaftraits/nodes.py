@@ -7,8 +7,7 @@ import fsspec
 import pandas as pd
 from pathlib import Path
 from sklearn.model_selection import train_test_split
-
-
+from kedro_datasets import pickle
 
 def download_data_from_github():
     '''
@@ -31,12 +30,22 @@ def download_data_from_github():
 
 
 
-def train_validation_split(train_bytes, val_size, random_state):
+def train_validation_split(train_serialized, val_size:int, random_state:int):
+    '''Reads serialized pickle data and splits it into train and validation sests.
+
+    Args:
+        train_serialized: pickle.PickleDataset
+
     '''
-    Uploads tabular train data
-    '''
+
+    # print(f"Reading pickle file from {train_serialized_path}")
+    # data = pd.read_pickle(train_serialized_path)
+    print(type(train_serialized))
+
+    train0 = train_serialized.load()
+
     train, val = train_test_split(
-        train_bytes, 
+        train0, 
         test_size=val_size, 
         shuffle=True, 
         random_state=random_state
