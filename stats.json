@@ -1,1 +1,1 @@
-{"train_raw": {"rows": 278, "columns": 177, "file_size": 402476}, "train": {"rows": 232, "columns": 177, "file_size": 337553}, "val": {"rows": 46, "columns": 177, "file_size": 72641}}
+{"train_raw": {"rows": 278, "columns": 177, "file_size": 402476}, "train_serialized": {"rows": 278, "columns": 179, "file_size": 43491046}, "train": {"rows": 232, "columns": 179, "file_size": 36724042}, "val": {"rows": 46, "columns": 179, "file_size": 6774733}}

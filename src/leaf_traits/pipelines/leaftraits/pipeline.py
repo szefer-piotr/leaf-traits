@@ -7,7 +7,11 @@ from kedro.pipeline import Pipeline, pipeline, node
 from .nodes import (
     download_data_from_github,
     train_validation_split,
-    serialize_images
+    serialize_images,
+    get_features,
+    get_images,
+    get_targets,
+    create_dataloader
 )
 
 
@@ -30,5 +34,34 @@ def create_pipeline(**kwargs) -> Pipeline:
             inputs=["train_serialized", "params:N_VAL_SAMPLES", "params:SEED"],
             outputs=["train","val"],
             func=train_validation_split,
-        )
+        ),
+        node(
+            name="get_images",
+            inputs="train",
+            outputs="train_images",
+            func=get_images,
+        ),
+        node(
+            name="get_tragets",
+            inputs=["train", "params:TARGET_COLUMNS"],
+            outputs="train_targets",
+            func=get_targets,
+        ),
+        node(
+            name="get_features", 
+            inputs=["train","params:FEATURE_COLUMNS"],
+            outputs="train_features",
+            func=get_features,
+        ),
+        node(
+            name="create_train_dataloader",
+            inputs=["train_images", 
+                    "train_targets", 
+                    "train_features", 
+                    "params:TRANSFORMATIONS", 
+                    "params:BATCH_SIZE", 
+                    "params:SHUFFLE"],
+            outputs="train_dataloader",
+            func=create_dataloader
+        ),    
     ])

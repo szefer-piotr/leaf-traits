@@ -3,9 +3,8 @@ train_raw:
   filepath: data/01_raw/train.csv
 
 train_serialized:
-  type: pickle.PickleDataset
-  filepath: data/02_intermediate/train_bytes.pkl
-  backend: pickle
+  type: pandas.CSVDataset
+  filepath: data/02_intermediate/train_bytes.csv
 
 train:
   type: pandas.CSVDataset
