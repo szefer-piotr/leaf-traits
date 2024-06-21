@@ -1,0 +1,4 @@
+train_images_list:
+  type: PartitionedDataSet
+  path: /data/01_raw/train_images
+  dataset: leaf_traits.datasets.FileWithDirAsLabel
