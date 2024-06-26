@@ -11,6 +11,8 @@ kedro = "^0.19.6"
 kedro-viz = "^9.1.0"
 kedro-datasets = {extras = ["pandas-csvdataset", "pandas-parquerdataset"], version = "^3.0.1"}
 fsspec = "^2024.6.0"
+torch = "^2.3.1"
+albumentations = "^1.4.10"
 
 
 [tool.poetry.group.dev.dependencies]
