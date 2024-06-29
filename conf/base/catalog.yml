@@ -1,0 +1,7 @@
+train_raw:
+  type: pandas.CSVDataset
+  filepath: data/01_raw/train.csv
+
+train_image_bytes:
+  type: pandas.CSVDataset
+  filepath: data/02_intermediate/train_image_bytes.csv

@@ -29,15 +29,18 @@ def download_data_from_github():
     
     return 1
 
-def list_files(
-        partitioned_file_list: Dict[str,Callable[[], Any]], limit: int = -1
-) -> pd.DataFrame:
-    results = []
+def serialize_images(train_raw:pd.DataFrame, image_path:str):
+    '''Reads an image file path from the raw data, then opens the corresponding image based on its id and writes it in a new column as bytes.
 
-    for partition_key, partition_load_func in sorted(partitioned_file_list.items()):
-        file_path = partition_load_func()
-        results.append(file_path)
+    Args:
+        train_raw (pd.DataFrame): Raw train dataset.
+        image_path (str): Path to the folder containing the images.
+
+    Returns:
+        Returns serialized train dataset as pickle format.
+    '''
     
-    df = pd.DataFrame(results)
-
-    return df if limit < 0 else df.sample(n=limit, random_state=42)
+    train_raw['file_path'] = train_raw['id'].apply(lambda s: f'{image_path}/{s}.jpeg')
+    train_raw['jpeg_bytes'] = train_raw['file_path'].apply(lambda fp: open(fp, 'rb').read())
+    
+    return train_raw
