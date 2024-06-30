@@ -44,3 +44,4 @@ def serialize_images(train_raw:pd.DataFrame, image_path:str):
     train_raw['jpeg_bytes'] = train_raw['file_path'].apply(lambda fp: open(fp, 'rb').read())
     
     return train_raw
+

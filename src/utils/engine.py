@@ -10,6 +10,7 @@ def train_step(
     optimizer: torch.optim.Optimizer,
     device: torch.device,
 ) -> float:
+    
     """Validates a PyTorch model for a single epoch.
     
     Turns a target PyTorch model to training mode and then
@@ -56,6 +57,7 @@ def val_step(
     loss_fn: Callable,
     device: torch.device,
 ) -> float:
+    
     """Validates a PyTorch model for a single epoch.
     
     Turns a target PyTorch model to 'eval' mode and then
