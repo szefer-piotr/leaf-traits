@@ -1,32 +1,31 @@
-from torch.utils.data import Dataset
-from typing import List, Dict
-import imageio.v3 as imageio
-import albumentations as A
+from torch.utils.data import Dataset, DataLoader
+import imageio.v3 as iio
+from pathlib import Path
 import numpy as np
 
 class LTDataset(Dataset):
     def __init__(
         self, 
-        image_bytes: List, 
-        targets: np.array, 
-        features: np.array, 
+        file_path: np.ndarray, 
+        targets: np.ndarray, 
+        features: np.ndarray, 
         transforms: A.Compose = None       
-    ):
-        self.image_bytes = image_bytes
+	):
+        self.file_path = file_path
         self.targets = targets
         self.features = features
         self.transforms = transforms
 
     def __len__(self):
-        return len(self.image_bytes)
-    
-    def __getitem__(self, index) -> Dict:
-        predictor = {
+        return len(self.file_path)
+
+    def __getitem__(self, index):
+        X_sample = {
             'image': self.transforms(
-                image=imageio.imread(self.image_bytes[index]),
-            )['image'],
+                    image=iio.imread(Path("..", self.file_path[index])),
+                )['image'],
             'feature': self.features[index],
         }
-        target = self.targets
-
-        return predictor, target
+        y_sample = self.targets[index]
+            
+        return X_sample, y_sample

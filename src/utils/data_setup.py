@@ -4,7 +4,7 @@ from pathlib import Path
 import albumentations as A
 
 from typing import Tuple, List
-from src.utils.datasets import MyDataset
+from src.utils.datasets import LTDataset
 import pandas as pd
 from albumentations.pytorch import ToTensorV2
 
@@ -56,14 +56,14 @@ def create_dataloaders(
     val_batch_size: int,
 ) -> Tuple[DataLoader, DataLoader]:
     
-    train_dataset = MyDataset(
+    train_dataset = LTDataset(
         train_df['file_path'].values,
         train_df[target_columns].to_numpy(),
         train_df[feature_columns].to_numpy(),
         train_transformations,
     )
 
-    val_dataset = MyDataset(
+    val_dataset = LTDataset(
         val_df['file_path'].values,
         val_df[target_columns].to_numpy(),
         val_df[feature_columns].to_numpy(),
