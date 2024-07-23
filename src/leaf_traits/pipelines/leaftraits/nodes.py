@@ -8,6 +8,8 @@ import pandas as pd
 from pathlib import Path
 from typing import Dict, Any, Callable
 
+# from src
+
 def leaftraits():
     print("Hello Kedro!")
     return 1
@@ -45,3 +47,7 @@ def serialize_images(train_raw:pd.DataFrame, image_path:str):
     
     return train_raw
 
+# def train_model(
+        
+# ):
+#     pass

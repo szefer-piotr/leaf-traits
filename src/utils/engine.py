@@ -11,7 +11,7 @@ def train_step(
     device: torch.device,
 ) -> float:
     
-    """Validates a PyTorch model for a single epoch.
+    """Trains a PyTorch model for a single epoch.
     
     Turns a target PyTorch model to training mode and then
     runs through all of the required training steps (forward
@@ -101,7 +101,7 @@ def train_model(
     epochs: int = 5,
     device: torch.device,
 ) -> Dict[str, List]:
-    """Trains and tests a PyTorch model.
+    """Trains and validates a PyTorch model.
 
     Passes a target PyTorch models through train_step() and validation_step()
     functions for a number of epochs, training and validating the model

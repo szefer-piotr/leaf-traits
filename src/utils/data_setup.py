@@ -8,6 +8,8 @@ from src.utils.datasets import LTDataset
 import pandas as pd
 from albumentations.pytorch import ToTensorV2
 
+import matplotlib.pyplot as plt
+
 # Add augmentations
 def create_augmentations(
     original_image_size: int,
@@ -85,3 +87,16 @@ def create_dataloaders(
     )
 
     return train_dataloader, val_dataloader
+
+
+def visualize_transformations(
+    train: pandas.DataFrame,
+    idx: int,
+    TRAIN_TRANSFORMS: A.Compose,
+):
+    example_image_path = train.file_path[0]
+    image_array = iio.imread(Path("..", example_image_path))
+
+    fig, axs = plt.subplots(1, 2)
+    axs[0].imshow(image_array)
+    axs[1].imshow(TRAIN_TRANSFORMS(image=image_array)['image'].permute(1,2,0))
