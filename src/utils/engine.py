@@ -98,8 +98,8 @@ def train_model(
     val_dataloader: torch.utils.data.DataLoader,
     optimizer: torch.optim.Optimizer,
     loss_fn: Callable,
-    epochs: int = 5,
     device: torch.device,
+    epochs: int = 5,
 ) -> Dict[str, List]:
     """Trains and validates a PyTorch model.
 

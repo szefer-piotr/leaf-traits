@@ -5,3 +5,11 @@ train_raw:
 train_image_bytes:
   type: pandas.CSVDataset
   filepath: data/02_intermediate/train_image_bytes.csv
+
+train_df:
+  type: pandas.CSVDataset
+  filepath: data/05_model_input/train_df.csv
+
+val_df:
+  type: pandas.CSVDataset
+  filepath: data/05_model_input/val_df.csv

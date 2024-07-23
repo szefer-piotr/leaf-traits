@@ -4,7 +4,7 @@ generated using Kedro 0.19.6
 """
 
 from kedro.pipeline import Pipeline, pipeline, node
-from .nodes import download_data_from_github, serialize_images
+from .nodes import download_data_from_github, serialize_images, train_validation_split
 
 
 def create_pipeline(**kwargs) -> Pipeline:
@@ -20,5 +20,11 @@ def create_pipeline(**kwargs) -> Pipeline:
             inputs=["train_raw", "params:image_path"],
             outputs="train_image_bytes",
             func=serialize_images,
+        ),
+        node(
+            name="train_validation_split",
+            inputs="train_image_bytes",
+            outputs=["train_df", "val_df"],
+            func=train_validation_split,
         ),
     ])

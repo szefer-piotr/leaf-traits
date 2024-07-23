@@ -90,7 +90,7 @@ def create_dataloaders(
 
 
 def visualize_transformations(
-    train: pandas.DataFrame,
+    train: pd.DataFrame,
     idx: int,
     TRAIN_TRANSFORMS: A.Compose,
 ):
