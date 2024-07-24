@@ -65,3 +65,6 @@ attr = "leaf_traits.__version__"
 [tool.setuptools.packages.find]
 where = [ "src",]
 namespaces = false
+
+[tool.kedro_telemetry]
+project_id = "e83f4901281c4b66be1659add237d7e0"
