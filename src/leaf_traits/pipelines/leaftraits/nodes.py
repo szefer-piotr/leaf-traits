@@ -18,7 +18,7 @@ from src.utils.datasets import LTDataset
 from src.utils.data_setup import create_augmentations, create_dataloaders, visualize_transformations
 from src.utils.engine import train_step, val_step, train_model
 
-
+import mlflow
 
 def download_data_from_github():
     
@@ -123,5 +123,6 @@ def train_selected_model(
         device=device)
 
     # save_model(model, target_dir=save_model_path, model_name=saved_model_name)
+    mlflow.pytorch.log_model(model, artifact_path="model")
 
     return model_results

@@ -10,6 +10,8 @@ conf/**/*credentials*
 
 # ignore everything in the following folders
 data/**
+mlartifacts/*
+mlruns/*
 
 # except their sub-folders
 !data/**/
