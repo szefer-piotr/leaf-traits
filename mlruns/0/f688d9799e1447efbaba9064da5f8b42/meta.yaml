@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/f688d9799e1447efbaba9064da5f8b42/artifacts
+end_time: 1722161504958
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: f688d9799e1447efbaba9064da5f8b42
+run_name: bright-bear-908
+run_uuid: f688d9799e1447efbaba9064da5f8b42
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1722161458852
+status: 3
+tags: []
+user_id: piotr
