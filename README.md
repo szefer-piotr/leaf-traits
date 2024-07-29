@@ -1,4 +1,17 @@
-# leaf-traits
+# Determining plant traits using field photographs (leaf-traits)
+
+This is an implementation of my solution to the Kaggle competition:
+
+## How to start
+
+```
+export = PYTHONPATH=.
+```
+To allow for the mlflow integration run
+
+```
+poetry run mlflow server --host 0.0.0.0 --port 5001
+```
 
 ## Overview
 
