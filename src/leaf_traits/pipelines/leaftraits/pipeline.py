@@ -8,7 +8,8 @@ from .nodes import (
     download_data_from_github, 
     serialize_images, 
     train_validation_split,
-    train_selected_model
+    train_selected_model,
+    plot_loss_curves
 )
 
 
@@ -46,5 +47,11 @@ def create_pipeline(**kwargs) -> Pipeline:
             ],
             outputs="model_results",
             func=train_selected_model,
-        )
+        ),
+        node(
+            name="plot_loss_curves",
+            inputs="model_results",
+            outputs="figure",
+            func=plot_loss_curves
+        ),
     ])

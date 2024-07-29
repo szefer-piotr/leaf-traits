@@ -6,6 +6,7 @@ generated using Kedro 0.19.6
 import fsspec
 import pandas as pd
 import torch
+import matplotlib.pyplot as plt
 
 from pathlib import Path
 from typing import Dict, Any, Callable, List
@@ -19,6 +20,7 @@ from src.utils.data_setup import create_augmentations, create_dataloaders, visua
 from src.utils.engine import train_step, val_step, train_model
 
 import mlflow
+# from mlflow.models import infer_signature
 
 def download_data_from_github():
     
@@ -126,3 +128,34 @@ def train_selected_model(
     mlflow.pytorch.log_model(model, artifact_path="model")
 
     return model_results
+
+def plot_loss_curves(results: Dict[str, List[float]]):
+    """Plots training curves of a results dictionary.
+
+    Args:
+        results (dict): dictionary containing list of values, e.g.
+            {"train_loss": [...],
+             "test_loss": [...]}
+    """
+    
+    # Get the loss values of the results dictionary (training and test)
+    loss = results['train_loss']
+    val_loss = results['validation_loss']
+
+    # Figure out how many epochs there were
+    epochs = range(len(results['train_loss']))
+
+    # Setup a plot 
+    fig, ax = plt.subplots(figsize=(15, 7))
+
+    # Plot loss
+    # plt.subplot(1, 2, 1)
+    plt.plot(epochs, loss, label='train_loss')
+    plt.plot(epochs, val_loss, label='validation_loss')
+    plt.title('Loss')
+    plt.xlabel('Epochs')
+    plt.legend()
+
+    mlflow.log_figure(fig, "train_val_loss.png")
+
+    return fig

@@ -13,3 +13,9 @@ train_df:
 val_df:
   type: pandas.CSVDataset
   filepath: data/05_model_input/val_df.csv
+
+figure:
+  type: matplotlib.MatplotlibWriter
+  filepath: data/08_reporting/train_validation_loss.png
+  save_args:
+    format: png
