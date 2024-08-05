@@ -3,7 +3,9 @@ import torch
 import numpy as np
 
 class R2Loss():
-    
+    """
+    target_medians: ??
+    """
     def __init__(
         self, 
         target_medians: np.array, 

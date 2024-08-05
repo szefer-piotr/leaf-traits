@@ -22,7 +22,7 @@ class SimpleMLflow():
     def before_pipeline_run(
         self, run_params: dict[str, Any], pipeline: Pipeline, catalog
     ) -> None:        
-        mlflow.set_tracking_uri("http://localhost:5000")
+        mlflow.set_tracking_uri("http://localhost:5001")
         mlflow.set_experiment("testing_architectures")
         mlflow.start_run()
         mlflow.set_tag("test_pipeline", "example")

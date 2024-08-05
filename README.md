@@ -13,6 +13,12 @@ To allow for the mlflow integration run
 poetry run mlflow server --host 0.0.0.0 --port 5001
 ```
 
+To run training pipeline using only images, withouth the features from tabular data, use the following command.
+
+```
+poetry run kedro run --params="feature_columns=[]"
+```
+
 ## Overview
 
 This is your new Kedro project with Kedro-Viz setup, which was generated using `kedro 0.19.6`.
