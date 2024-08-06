@@ -7,6 +7,7 @@ import fsspec
 import pandas as pd
 import torch
 import matplotlib.pyplot as plt
+import numpy as np
 
 from pathlib import Path
 from typing import Dict, Any, Callable, List
@@ -77,6 +78,7 @@ def train_selected_model(
     train_df: pd.DataFrame,
     val_df: pd.DataFrame,
     target_columns: List,
+    target_transformation: str,
     feature_columns: List,
     device: torch.device,
     save_model_path: str = "/models/",
@@ -95,6 +97,7 @@ def train_selected_model(
         feature_columns = feature_columns,
         train_transformations = train_transformations,
         val_transformations = val_transformations,
+        target_transformation = target_transformation,
         train_batch_size = 8,
         val_batch_size = 16,
         )

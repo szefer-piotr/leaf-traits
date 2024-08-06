@@ -3,6 +3,7 @@ import imageio.v3 as iio
 from pathlib import Path
 import numpy as np
 import albumentations as A
+from typing import Callable
 
 class LTDataset(Dataset):
     """Custom dataset class that for each datapoint returns image, 
@@ -19,12 +20,14 @@ class LTDataset(Dataset):
         file_path: np.ndarray, 
         targets: np.ndarray, 
         features: np.ndarray, 
-        transforms: A.Compose = None       
+        target_transformation: str,
+        transforms: A.Compose = None,    
 	):
         self.file_path = file_path
         self.targets = targets
         self.features = features
         self.transforms = transforms
+        self.target_transformation = target_transformation
 
     def __len__(self):
         return len(self.file_path)
@@ -36,6 +39,6 @@ class LTDataset(Dataset):
                 )['image'],
             'feature': self.features[index],
         }
-        y_sample = self.targets[index]
+        y_sample = eval(self.target_transformation)(self.targets[index])
             
         return X_sample, y_sample

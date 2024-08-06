@@ -41,6 +41,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 "train_df", 
                 "val_df", 
                 "params:target_columns",
+                "params:target_transformation",
                 "params:feature_columns", 
                 "params:device",
                 "params:save_model_path"
@@ -52,6 +53,6 @@ def create_pipeline(**kwargs) -> Pipeline:
             name="plot_loss_curves",
             inputs="model_results",
             outputs="figure",
-            func=plot_loss_curves
+            func=plot_loss_curves,
         ),
     ])
