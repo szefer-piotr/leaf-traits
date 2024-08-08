@@ -13,7 +13,11 @@ from pathlib import Path
 from typing import Dict, Any, Callable, List
 from sklearn.model_selection import train_test_split
 
-from models.model_builders import ViTModelAdd, ViTModelConcat
+from models.model_builders import (
+    ViTModelAdd, 
+    ViTModelConcat,
+    ResNetModelAdd,
+)
 from src.utils.save_model import save_model
 from src.utils.loss_function import R2Loss
 from src.utils.datasets import LTDataset
@@ -83,7 +87,10 @@ def train_selected_model(
     device: torch.device,
     save_model_path: str = "/models/",
 ):
-    models_dict = {"vit_concat": ViTModelConcat, "vit_add": ViTModelAdd}
+    models_dict = {
+        "vit_concat": ViTModelConcat, 
+        "vit_add": ViTModelAdd,
+        "resnet50_add": ResNetModelAdd}
 
     train_transformations, val_transformations = create_augmentations(
         original_image_size= 512,
