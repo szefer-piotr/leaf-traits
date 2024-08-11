@@ -1,4 +1,5 @@
 from kedro.framework.hooks import hook_impl
+import pytest
 from kedro.framework.context import KedroContext
 from kedro.pipeline import Pipeline
 
@@ -11,6 +12,7 @@ class SimpleMLflow():
     def __init__(self):
         self.params = None
     
+    # @pytest.hookimpl(optionalhook=True)
     @hook_impl
     def after_context_created(
         self,
@@ -18,6 +20,7 @@ class SimpleMLflow():
     ) -> None:
         self.params = context.params
 
+    # @pytest.hookimpl(optionalhook=True)
     @hook_impl
     def before_pipeline_run(
         self, run_params: dict[str, Any], pipeline: Pipeline, catalog
@@ -29,6 +32,7 @@ class SimpleMLflow():
         if self.params:
             mlflow.log_params(self.params)
 
+    # @pytest.hookimpl(optionalhook=True)
     @hook_impl
     def after_pipeline_run(
         self,

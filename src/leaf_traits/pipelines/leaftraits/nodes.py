@@ -8,6 +8,7 @@ import pandas as pd
 import torch
 import matplotlib.pyplot as plt
 import numpy as np
+import mlflow
 
 from pathlib import Path
 from typing import Dict, Any, Callable, List
@@ -24,7 +25,7 @@ from src.utils.datasets import LTDataset
 from src.utils.data_setup import create_augmentations, create_dataloaders, visualize_transformations
 from src.utils.engine import train_step, val_step, train_model
 
-import mlflow
+
 # from mlflow.models import infer_signature
 
 def download_data_from_github():
@@ -58,7 +59,7 @@ def serialize_images(train_raw:pd.DataFrame, image_path:str):
     '''
     
     train_raw['file_path'] = train_raw['id'].apply(lambda s: f'{image_path}/{s}.jpeg')
-    train_raw['jpeg_bytes'] = train_raw['file_path'].apply(lambda fp: open(fp, 'rb').read())
+    # train_raw['jpeg_bytes'] = train_raw['file_path'].apply(lambda fp: open(fp, 'rb').read())
     
     return train_raw
 

@@ -611,6 +611,25 @@ docs = ["ipython", "matplotlib", "numpydoc", "sphinx"]
 tests = ["pytest", "pytest-cov", "pytest-xdist"]
 
 [[package]]
+name = "databricks-sdk"
+version = "0.29.0"
+description = "Databricks SDK for Python (Beta)"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "databricks-sdk-0.29.0.tar.gz", hash = "sha256:23016df608bb025548582d378f94af2ea312c0d77250ac14aa57d1f863efe88c"},
+    {file = "databricks_sdk-0.29.0-py3-none-any.whl", hash = "sha256:3e08578f4128f759a6a9bba2c836ec32a4cff37fb594530209ab92f2534985bd"},
+]
+
+[package.dependencies]
+google-auth = ">=2.0,<3.0"
+requests = ">=2.28.1,<3"
+
+[package.extras]
+dev = ["autoflake", "databricks-connect", "ipython", "ipywidgets", "isort", "pycodestyle", "pyfakefs", "pytest", "pytest-cov", "pytest-mock", "pytest-rerunfailures", "pytest-xdist", "requests-mock", "wheel", "yapf"]
+notebook = ["ipython (>=8,<9)", "ipywidgets (>=8,<9)"]
+
+[[package]]
 name = "debugpy"
 version = "1.8.1"
 description = "An implementation of the Debug Adapter Protocol for Python"
@@ -1005,6 +1024,29 @@ doc = ["sphinx (==4.3.2)", "sphinx-autodoc-typehints", "sphinx-rtd-theme", "sphi
 test = ["coverage[toml]", "ddt (>=1.1.1,!=1.4.3)", "mock", "mypy", "pre-commit", "pytest (>=7.3.1)", "pytest-cov", "pytest-instafail", "pytest-mock", "pytest-sugar", "typing-extensions"]
 
 [[package]]
+name = "google-auth"
+version = "2.33.0"
+description = "Google Authentication Library"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "google_auth-2.33.0-py2.py3-none-any.whl", hash = "sha256:8eff47d0d4a34ab6265c50a106a3362de6a9975bb08998700e389f857e4d39df"},
+    {file = "google_auth-2.33.0.tar.gz", hash = "sha256:d6a52342160d7290e334b4d47ba390767e4438ad0d45b7630774533e82655b95"},
+]
+
+[package.dependencies]
+cachetools = ">=2.0.0,<6.0"
+pyasn1-modules = ">=0.2.1"
+rsa = ">=3.1.4,<5"
+
+[package.extras]
+aiohttp = ["aiohttp (>=3.6.2,<4.0.0.dev0)", "requests (>=2.20.0,<3.0.0.dev0)"]
+enterprise-cert = ["cryptography (==36.0.2)", "pyopenssl (==22.0.0)"]
+pyopenssl = ["cryptography (>=38.0.3)", "pyopenssl (>=20.0.0)"]
+reauth = ["pyu2f (>=0.1.5)"]
+requests = ["requests (>=2.20.0,<3.0.0.dev0)"]
+
+[[package]]
 name = "graphene"
 version = "3.3"
 description = "GraphQL Framework for Python"
@@ -1355,6 +1397,17 @@ files = [
 [package.extras]
 docs = ["furo", "jaraco.packaging (>=9.3)", "jaraco.tidelift (>=1.4)", "rst.linker (>=1.9)", "sphinx (<7.2.5)", "sphinx (>=3.5)", "sphinx-lint"]
 testing = ["jaraco.test (>=5.4)", "pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-cov", "pytest-enabler (>=2.2)", "pytest-mypy", "pytest-ruff (>=0.2.1)", "zipp (>=3.17)"]
+
+[[package]]
+name = "iniconfig"
+version = "2.0.0"
+description = "brain-dead simple config-ini parsing"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "iniconfig-2.0.0-py3-none-any.whl", hash = "sha256:b6a85871a79d2e3b22d2d1b94ac2824226a63c6b741c88f7ae975f18b6778374"},
+    {file = "iniconfig-2.0.0.tar.gz", hash = "sha256:2d91e135bf72d31a410b17c16da610a82cb55f6b0477d1a902134b24a455b8b3"},
+]
 
 [[package]]
 name = "intel-openmp"
@@ -2146,48 +2199,35 @@ tbb = "==2021.*"
 
 [[package]]
 name = "mlflow"
-version = "2.14.3"
+version = "2.15.1"
 description = "MLflow is an open source platform for the complete machine learning lifecycle"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "mlflow-2.14.3-py3-none-any.whl", hash = "sha256:2de915346c8e34a9d13efbd6469551980923619274db57fd2253621a2c666e18"},
-    {file = "mlflow-2.14.3.tar.gz", hash = "sha256:292cae4b83574a0cb223117e224caa6798933078af0233719c2b612bea645617"},
+    {file = "mlflow-2.15.1-py3-none-any.whl", hash = "sha256:f998b8ec9df9199284f52e79ea5dd0b2b76b327ed7f060531e44f1ecd197c5d9"},
+    {file = "mlflow-2.15.1.tar.gz", hash = "sha256:88da13f547cedce992d4614a4547f44bcdaf369e893179dd9a8bfa60338011bf"},
 ]
 
 [package.dependencies]
 alembic = "<1.10.0 || >1.10.0,<2"
-cachetools = ">=5.0.0,<6"
-click = ">=7.0,<9"
-cloudpickle = "<4"
 docker = ">=4.0.0,<8"
-entrypoints = "<1"
 Flask = "<4"
-gitpython = ">=3.1.9,<4"
 graphene = "<4"
 gunicorn = {version = "<23", markers = "platform_system != \"Windows\""}
-importlib-metadata = ">=3.7.0,<4.7.0 || >4.7.0,<8"
 Jinja2 = [
     {version = ">=2.11,<4", markers = "platform_system != \"Windows\""},
     {version = ">=3.0,<4", markers = "platform_system == \"Windows\""},
 ]
 markdown = ">=3.3,<4"
 matplotlib = "<4"
+mlflow-skinny = "2.15.1"
 numpy = "<2"
-opentelemetry-api = ">=1.9.0,<3"
-opentelemetry-sdk = ">=1.9.0,<3"
-packaging = "<25"
 pandas = "<3"
-protobuf = ">=3.12.0,<5"
 pyarrow = ">=4.0.0,<16"
-pytz = "<2025"
-pyyaml = ">=5.1,<7"
 querystring-parser = "<2"
-requests = ">=2.17.3,<3"
 scikit-learn = "<2"
 scipy = "<2"
 sqlalchemy = ">=1.4.0,<3"
-sqlparse = ">=0.4.0,<1"
 waitress = {version = "<4", markers = "platform_system == \"Windows\""}
 
 [package.extras]
@@ -2197,7 +2237,46 @@ extras = ["azureml-core (>=1.2.0)", "boto3", "botocore", "google-cloud-storage (
 gateway = ["aiohttp (<4)", "boto3 (>=1.28.56,<2)", "fastapi (<1)", "pydantic (>=1.0,<3)", "slowapi (>=0.1.9,<1)", "tiktoken (<1)", "uvicorn[standard] (<1)", "watchfiles (<1)"]
 genai = ["aiohttp (<4)", "boto3 (>=1.28.56,<2)", "fastapi (<1)", "pydantic (>=1.0,<3)", "slowapi (>=0.1.9,<1)", "tiktoken (<1)", "uvicorn[standard] (<1)", "watchfiles (<1)"]
 jfrog = ["mlflow-jfrog-plugin"]
-langchain = ["langchain (>=0.1.0,<=0.2.3)"]
+langchain = ["langchain (>=0.1.0,<=0.2.11)"]
+sqlserver = ["mlflow-dbstore"]
+xethub = ["mlflow-xethub"]
+
+[[package]]
+name = "mlflow-skinny"
+version = "2.15.1"
+description = "MLflow is an open source platform for the complete machine learning lifecycle"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "mlflow_skinny-2.15.1-py3-none-any.whl", hash = "sha256:a48c6f56106b104dc7221bad91af75a150b927d15210a41928cc8ecba086470a"},
+    {file = "mlflow_skinny-2.15.1.tar.gz", hash = "sha256:302f49757ffc8bdfc517b06f5252a02634203fec5e5ce95ad876a36af8403907"},
+]
+
+[package.dependencies]
+cachetools = ">=5.0.0,<6"
+click = ">=7.0,<9"
+cloudpickle = "<4"
+databricks-sdk = ">=0.20.0,<1"
+entrypoints = "<1"
+gitpython = ">=3.1.9,<4"
+importlib-metadata = ">=3.7.0,<4.7.0 || >4.7.0,<8"
+opentelemetry-api = ">=1.9.0,<3"
+opentelemetry-sdk = ">=1.9.0,<3"
+packaging = "<25"
+protobuf = ">=3.12.0,<6"
+pytz = "<2025"
+pyyaml = ">=5.1,<7"
+requests = ">=2.17.3,<3"
+sqlparse = ">=0.4.0,<1"
+
+[package.extras]
+aliyun-oss = ["aliyunstoreplugin"]
+databricks = ["azure-storage-file-datalake (>12)", "boto3 (>1)", "botocore", "google-cloud-storage (>=1.30.0)"]
+extras = ["azureml-core (>=1.2.0)", "boto3", "botocore", "google-cloud-storage (>=1.30.0)", "kubernetes", "mlserver (>=1.2.0,!=1.3.1,<1.4.0)", "mlserver-mlflow (>=1.2.0,!=1.3.1,<1.4.0)", "prometheus-flask-exporter", "pyarrow", "pysftp", "requests-auth-aws-sigv4", "virtualenv"]
+gateway = ["aiohttp (<4)", "boto3 (>=1.28.56,<2)", "fastapi (<1)", "pydantic (>=1.0,<3)", "slowapi (>=0.1.9,<1)", "tiktoken (<1)", "uvicorn[standard] (<1)", "watchfiles (<1)"]
+genai = ["aiohttp (<4)", "boto3 (>=1.28.56,<2)", "fastapi (<1)", "pydantic (>=1.0,<3)", "slowapi (>=0.1.9,<1)", "tiktoken (<1)", "uvicorn[standard] (<1)", "watchfiles (<1)"]
+jfrog = ["mlflow-jfrog-plugin"]
+langchain = ["langchain (>=0.1.0,<=0.2.11)"]
 sqlserver = ["mlflow-dbstore"]
 xethub = ["mlflow-xethub"]
 
@@ -2797,6 +2876,17 @@ typing = ["typing-extensions"]
 xmp = ["defusedxml"]
 
 [[package]]
+name = "pip"
+version = "24.2"
+description = "The PyPA recommended tool for installing Python packages."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "pip-24.2-py3-none-any.whl", hash = "sha256:2cd581cf58ab7fcfca4ce8efa6dcacd0de5bf8d0a3eb9ec927e07405f4d9e2a2"},
+    {file = "pip-24.2.tar.gz", hash = "sha256:5b5e490b5e9cb275c879595064adce9ebd31b854e3e803740b72f9ccf34a45b8"},
+]
+
+[[package]]
 name = "platformdirs"
 version = "4.2.2"
 description = "A small Python package for determining appropriate platform-specific dirs, e.g. a `user data dir`."
@@ -2993,6 +3083,31 @@ files = [
 numpy = ">=1.16.6,<2"
 
 [[package]]
+name = "pyasn1"
+version = "0.6.0"
+description = "Pure-Python implementation of ASN.1 types and DER/BER/CER codecs (X.208)"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "pyasn1-0.6.0-py2.py3-none-any.whl", hash = "sha256:cca4bb0f2df5504f02f6f8a775b6e416ff9b0b3b16f7ee80b5a3153d9b804473"},
+    {file = "pyasn1-0.6.0.tar.gz", hash = "sha256:3a35ab2c4b5ef98e17dfdec8ab074046fbda76e281c5a706ccd82328cfc8f64c"},
+]
+
+[[package]]
+name = "pyasn1-modules"
+version = "0.4.0"
+description = "A collection of ASN.1-based protocols modules"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "pyasn1_modules-0.4.0-py3-none-any.whl", hash = "sha256:be04f15b66c206eed667e0bb5ab27e2b1855ea54a842e5037738099e8ca4ae0b"},
+    {file = "pyasn1_modules-0.4.0.tar.gz", hash = "sha256:831dbcea1b177b28c9baddf4c6d1013c24c3accd14a1873fffaa6a2e905f17b6"},
+]
+
+[package.dependencies]
+pyasn1 = ">=0.4.6,<0.7.0"
+
+[[package]]
 name = "pycparser"
 version = "2.22"
 description = "C parser in Python"
@@ -3151,6 +3266,28 @@ files = [
     {file = "pyproject_hooks-1.1.0-py3-none-any.whl", hash = "sha256:7ceeefe9aec63a1064c18d939bdc3adf2d8aa1988a510afec15151578b232aa2"},
     {file = "pyproject_hooks-1.1.0.tar.gz", hash = "sha256:4b37730834edbd6bd37f26ece6b44802fb1c1ee2ece0e54ddff8bfc06db86965"},
 ]
+
+[[package]]
+name = "pytest"
+version = "8.3.2"
+description = "pytest: simple powerful testing with Python"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "pytest-8.3.2-py3-none-any.whl", hash = "sha256:4ba08f9ae7dcf84ded419494d229b48d0903ea6407b030eaec46df5e6a73bba5"},
+    {file = "pytest-8.3.2.tar.gz", hash = "sha256:c132345d12ce551242c87269de812483f5bcc87cdbb4722e48487ba194f9fdce"},
+]
+
+[package.dependencies]
+colorama = {version = "*", markers = "sys_platform == \"win32\""}
+exceptiongroup = {version = ">=1.0.0rc8", markers = "python_version < \"3.11\""}
+iniconfig = "*"
+packaging = "*"
+pluggy = ">=1.5,<2"
+tomli = {version = ">=1", markers = "python_version < \"3.11\""}
+
+[package.extras]
+dev = ["argcomplete", "attrs (>=19.2)", "hypothesis (>=3.56)", "mock", "pygments (>=2.7.2)", "requests", "setuptools", "xmlschema"]
 
 [[package]]
 name = "python-dateutil"
@@ -3498,6 +3635,20 @@ pytoolconfig = {version = ">=1.2.2", extras = ["global"]}
 dev = ["build (>=0.7.0)", "pre-commit (>=2.20.0)", "pytest (>=7.0.1)", "pytest-cov (>=4.1.0)", "pytest-timeout (>=2.1.0)"]
 doc = ["pytoolconfig[doc]", "sphinx (>=4.5.0)", "sphinx-autodoc-typehints (>=1.18.1)", "sphinx-rtd-theme (>=1.0.0)"]
 release = ["pip-tools (>=6.12.1)", "toml (>=0.10.2)", "twine (>=4.0.2)"]
+
+[[package]]
+name = "rsa"
+version = "4.9"
+description = "Pure-Python RSA implementation"
+optional = false
+python-versions = ">=3.6,<4"
+files = [
+    {file = "rsa-4.9-py3-none-any.whl", hash = "sha256:90260d9058e514786967344d0ef75fa8727eed8a7d2e43ce9f4bcf1b536174f7"},
+    {file = "rsa-4.9.tar.gz", hash = "sha256:e38464a49c6c85d7f1351b0126661487a7e0a14a50f1675ec50eb34d4f20ef21"},
+]
+
+[package.dependencies]
+pyasn1 = ">=0.1.3"
 
 [[package]]
 name = "ruamel-yaml"
@@ -4974,4 +5125,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "c239d598093599e9eb9fb897d0e8ff29a696198b7881b6285feceebca0ec38e9"
+content-hash = "08e5060d85b118f19fe8a3e3ffdad5738a60af770a25837b36a0ece0d8468b04"

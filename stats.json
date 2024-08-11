@@ -1,1 +1,1 @@
-{"train_raw": {"rows": 278, "columns": 177, "file_size": 402476}, "train_image_bytes": {"rows": 278, "columns": 179, "file_size": 43501054}, "train_df": {"rows": 55, "columns": 179, "file_size": 8611860}, "val_df": {"rows": 223, "columns": 179, "file_size": 34896923}}
+{"train_raw": {"rows": 278, "columns": 177, "file_size": 402476}, "train_image_bytes": {"rows": 278, "columns": 178, "file_size": 423604}, "train_df": {"rows": 55, "columns": 178, "file_size": 90587}, "val_df": {"rows": 223, "columns": 178, "file_size": 340735}}
