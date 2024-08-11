@@ -65,11 +65,14 @@ def serialize_images(train_raw:pd.DataFrame, image_path:str):
 
 
 
-def train_validation_split(train_dataset: pd.DataFrame):
+def train_validation_split(
+        train_dataset: pd.DataFrame, 
+        train_size: float = 0.2,
+    ):
     no_of_rows = train_dataset.shape[0]
     train_idxs, val_idxs = train_test_split(
         range(0,no_of_rows),
-        train_size=0.2,
+        train_size=train_size,
         shuffle=True,
         random_state=42
         )

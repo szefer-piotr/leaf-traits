@@ -29,7 +29,7 @@ def create_pipeline(**kwargs) -> Pipeline:
         ),
         node(
             name="train_validation_split",
-            inputs="train_image_bytes",
+            inputs=["train_image_bytes", "params:train_size"],
             outputs=["train_df", "val_df"],
             func=train_validation_split,
         ),

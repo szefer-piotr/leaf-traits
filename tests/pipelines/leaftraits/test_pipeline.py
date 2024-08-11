@@ -31,7 +31,7 @@ def test_input_dataframe():
     # assert dummy_train_data.shape[0] != 0
     # It has the required column "file_path" column
 
-def test_serialize_images_returns_the_desired_column(dummy_train_data):
+def test_serialize_images_returns_the_desired_column(dummy_train_data: pd.DataFrame):
 
     dummy_path_data = serialize_images(
         train_raw = dummy_train_data,
@@ -46,7 +46,7 @@ def test_serialize_images_returns_the_desired_column(dummy_train_data):
     assert 'id' in dummy_path_data.columns
 
 
-def test_serialize_images_returns_a_dataframe_using_test_df(test_train_data_load):
+def test_serialize_images_returns_a_dataframe_using_test_df(test_train_data_load: pd.DataFrame):
 
     assert type(test_train_data_load) is pd.DataFrame
     
