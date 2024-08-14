@@ -55,10 +55,13 @@ def download_data_from_github(
     test_image_path = data_path / test_image_folder
     test_features_path = data_path / test_features
 
+    required_files = ['train_images', 'test_images', 'train.csv', 'test.csv']
     directories_on_path = os.listdir(data_path)
+    
+    # print(f"[INFO] Files in the {data_path} path: {checklist}")
 
-    if len(directories_on_path) == 4:
-        print(f"Test and training data on {data_path} exist.")
+    if all([element in directories_on_path for element in required_files]):
+        print(f"[INFO] Test and training data on {data_path} exist.")
     
     else:
         print(f"Did not find data in {data_path} directory, downloading from GitHub...")
@@ -105,6 +108,15 @@ def train_validation_split(
         random_state=42
         )
     return train_dataset.loc[train_idxs], train_dataset.loc[val_idxs]
+
+
+
+
+
+
+#[TODO] -----------
+
+
 
 
 

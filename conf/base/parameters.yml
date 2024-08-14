@@ -29,10 +29,10 @@ data_repository:
   test_features: "test.csv"
   org: "szefer-piotr"
   repo: "ltdata"
+
 train_image_path: '/home/piotr/leaf-traits/leaf-traits/data/01_raw/train_images'
 test_image_path: '/home/piotr/leaf-traits/leaf-traits/data/01_raw/test_images'
-# model_name: "vit_concat" #or ViTModelAdd()vit_add
-model_name: "resnet50_add"
+model_name: "resnet50_add" # model_name: "vit_concat" #or ViTModelAdd()vit_add
 train_size: 0.2
 target_columns: ['X4_mean', 'X11_mean', 'X18_mean', 'X50_mean', 'X26_mean', 'X3112_mean']
 target_transformation: "np.log1p"
