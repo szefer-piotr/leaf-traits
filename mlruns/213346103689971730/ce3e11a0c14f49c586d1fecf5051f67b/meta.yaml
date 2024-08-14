@@ -1,8 +1,9 @@
 artifact_uri: mlflow-artifacts:/213346103689971730/ce3e11a0c14f49c586d1fecf5051f67b/artifacts
+deleted_time: 1723623997240
 end_time: 1722171114947
 entry_point_name: ''
 experiment_id: '213346103689971730'
-lifecycle_stage: active
+lifecycle_stage: deleted
 run_id: ce3e11a0c14f49c586d1fecf5051f67b
 run_name: mysterious-snake-483
 run_uuid: ce3e11a0c14f49c586d1fecf5051f67b

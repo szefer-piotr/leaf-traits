@@ -1,8 +1,9 @@
 artifact_uri: mlflow-artifacts:/0/f688d9799e1447efbaba9064da5f8b42/artifacts
+deleted_time: 1723624004794
 end_time: 1722161504958
 entry_point_name: ''
 experiment_id: '0'
-lifecycle_stage: active
+lifecycle_stage: deleted
 run_id: f688d9799e1447efbaba9064da5f8b42
 run_name: bright-bear-908
 run_uuid: f688d9799e1447efbaba9064da5f8b42
