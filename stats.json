@@ -1,1 +1,1 @@
-{}
+{"test_raw": {"rows": 33, "columns": 165, "file_size": 49165}, "test_with_image_paths": {"rows": 33, "columns": 166, "file_size": 51625}, "train_raw": {"rows": 278, "columns": 177, "file_size": 402476}, "train_with_image_paths": {"rows": 278, "columns": 178, "file_size": 423604}, "train_df": {"rows": 55, "columns": 178, "file_size": 90587}, "val_df": {"rows": 223, "columns": 178, "file_size": 340735}}
