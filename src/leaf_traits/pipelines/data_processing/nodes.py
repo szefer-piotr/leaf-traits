@@ -25,16 +25,17 @@ import os
 def download_data_from_github(
     data_repository: Dict,
 ):
-    '''Downlods train and test image files path from the Github repository.
+    '''
+    Downlods train and test image files path from the Github repository.
 
     Args:
         data_path (Path) defaults to "data/01_raw".
-        train_image_folder (str) defaults to "train_images",
-        train_features: str = "train.csv",
-        test_image_folder: str = "test_images",
-        test_features: str = "test.csv",
-        org: str = "szefer-piotr",
-        repo: str = "ltdata"
+        train_image_folder (str) defaults to "train_images".
+        train_features (str) defaults to "train.csv".
+        test_image_folder (str) defaults to "test_images".
+        test_features (str) defaults to "test.csv".
+        org (str) defaults to "szefer-piotr".
+        repo (str) defaults to "ltdata"
 
     Returns:
         Additionally to downloading the data it returns a tuple with paths to train images, train feature and test images and test features.
