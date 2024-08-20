@@ -27,3 +27,8 @@ figure:
   filepath: data/08_reporting/train_validation_loss.png
   save_args:
     format: png
+
+# model:
+#   type: pickle.PickleDataset
+#   filepath: data/06_models/regressor.pickle
+#   versioned: true

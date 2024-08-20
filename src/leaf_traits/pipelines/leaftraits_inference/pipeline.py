@@ -1,6 +1,5 @@
 """
-This is a boilerplate pipeline 'leaftraits_inference'
-generated using Kedro 0.19.6
+The inference pipeline will take the figure and/or auxillary environmental data and predict the values of the sic target traits.
 """
 
 from kedro.pipeline import Pipeline, pipeline
