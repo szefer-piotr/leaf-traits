@@ -1,7 +1,9 @@
 import torch
+import mlflow
 
 from typing import Callable, Dict, List
 from tqdm.auto import tqdm
+
 
 def train_step(
     model: torch.nn.Module,
@@ -124,10 +126,10 @@ def train_model(
         In the form: {train_loss: [...], validation_loss: [...]}
     """
     
-    results = {
-        'train_loss': [],
-        'validation_loss': []
-    }
+    # results = {
+    #     'train_loss': [],
+    #     'validation_loss': []
+    # }
 
     for epoch in tqdm(range(epochs)):
         # print(epoch)
@@ -151,7 +153,10 @@ def train_model(
             f"val_loss: {val_loss:.4f} | "
         )
 
-        results['train_loss'].append(train_loss)
-        results['validation_loss'].append(val_loss)
+        mlflow.log_metric('train_loss', train_loss)
+        mlflow.log_metric('validation_loss', val_loss)
 
-    return results
+        # results['train_loss'].append(train_loss)
+        # results['validation_loss'].append(val_loss)
+
+    return model

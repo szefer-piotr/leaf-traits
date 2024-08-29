@@ -11,6 +11,7 @@ import numpy as np
 import mlflow
 
 from torch import nn
+from torch.utils.data import DataLoader
 from pathlib import Path
 from typing import Dict, Any, Callable, List
 from sklearn.model_selection import train_test_split
@@ -25,60 +26,6 @@ from src.utils.loss_function import R2Loss
 from src.utils.datasets import LTDataset
 from src.utils.data_setup import create_augmentations, create_dataloaders, visualize_transformations
 from src.utils.engine import train_step, val_step, train_model
-
-
-# from mlflow.models import infer_signature
-
-# def download_data_from_github():
-    
-#     data_path = Path("data/01_raw")
-#     image_path = data_path / "train_images"
-#     train_path = data_path / "train.csv"
-    
-#     if image_path.is_dir():
-#         print(f"{image_path} directory exists.")
-    
-#     else:
-#         print(f"Did not find {image_path} directory, downloading from GitHub...")
-#         fs = fsspec.filesystem("github", org="szefer-piotr", repo="ltdata")
-#         fs.get(fs.ls("train_images"), image_path.as_posix(), recursive=True)
-#         fs.get("train.csv", train_path.as_posix())
-    
-#     return 1
-
-
-
-# def serialize_images(train_raw:pd.DataFrame, image_path:str):
-#     '''Reads an image file path from the raw data, then opens the corresponding image based on its id and writes it in a new column as bytes.
-
-#     Args:
-#         train_raw (pd.DataFrame): Raw train dataset.
-#         image_path (str): Path to the folder containing the images.
-
-#     Returns:
-#         Returns serialized train dataset as pickle format.
-#     '''
-    
-#     train_raw['file_path'] = train_raw['id'].apply(lambda s: f'{image_path}/{s}.jpeg')
-#     # train_raw['jpeg_bytes'] = train_raw['file_path'].apply(lambda fp: open(fp, 'rb').read())
-    
-#     return train_raw
-
-
-
-# def train_validation_split(
-#         train_dataset: pd.DataFrame, 
-#         train_size: float = 0.2,
-#     ):
-#     no_of_rows = train_dataset.shape[0]
-#     train_idxs, val_idxs = train_test_split(
-#         range(0,no_of_rows),
-#         train_size=train_size,
-#         shuffle=True,
-#         random_state=42
-#         )
-#     return train_dataset.loc[train_idxs], train_dataset.loc[val_idxs]
-
 
 
 def train_selected_model(
@@ -140,47 +87,67 @@ def train_selected_model(
         epochs=epochs,
         device=device)
 
-    save_model(model, target_dir=save_model_path, model_name=saved_model_name)
-    
-    mlflow.pytorch.log_model(model, artifact_path="model")
+    mlflow.pytorch.log_model(
+        pytorch_model=model_results, 
+        artifact_path="pytorch-model",
+        registered_model_name="resnet_50_model")
 
     return model_results
 
-def plot_loss_curves(results: Dict[str, List[float]]):
-    """Plots training curves of a results dictionary.
 
-    Args:
-        results (dict): dictionary containing list of values, e.g.
-            {"train_loss": [...],
-             "test_loss": [...]}
-    """
+
+# TODO: modify this function such that it uses model obtained from get_registered_model_pth funciton and node
+
+def evaluate_model(
+    test_data: pd.DataFrame,
+    model: nn.Module,
+    target_columns: List,
+    feature_columns: List,
+    target_transformation: str,
+    test_batch_size: int,
+    device: torch.device,
+) -> float:
     
-    # Get the loss values of the results dictionary (training and test)
-    loss = results['train_loss']
-    val_loss = results['validation_loss']
+    model = model.to(device)
 
-    # Figure out how many epochs there were
-    epochs = range(len(results['train_loss']))
+    test_transformations, val_transformations = create_augmentations(
+        original_image_size= 512,
+        image_size=288
+        )
 
-    # Setup a plot 
-    fig, ax = plt.subplots(figsize=(15, 7))
+    test_dataset = LTDataset(
+        test_data['file_path'].values,
+        test_data[target_columns].to_numpy(),
+        test_data[feature_columns].to_numpy(),
+        target_transformation,
+        test_transformations,
+    )
 
-    # Plot loss
-    # plt.subplot(1, 2, 1)
-    plt.plot(epochs, loss, label='train_loss')
-    plt.plot(epochs, val_loss, label='validation_loss')
-    plt.title('Loss')
-    plt.xlabel('Epochs')
-    plt.legend()
+    test_dataloader = DataLoader(
+        test_dataset,
+        batch_size=test_batch_size,
+        drop_last=True,
+        num_workers=1,
+    )
 
-    mlflow.log_figure(fig, "train_val_loss.png")
-
-    return fig
-
-# def evaluate_model(
-#     test_data: pd.DataFrame,
-#     model_location: str,
-#     evaluation_function: Callable,
-# ) -> float:
+    target_medians = test_data[target_columns].median(axis=0).values
     
+    loss_fn = R2Loss(target_medians=target_medians, eps=1e-6)
     
+    model.eval()
+    
+    val_loss = 0
+    
+    with torch.inference_mode():
+        for batch, (X,y) in enumerate(test_dataloader):
+            # print(f"Batch: {batch}")
+            X['image'], X['feature'], y= X['image'].to(device), X['feature'].to(device), y.to(device)
+            val_preds = model(X)
+            loss = loss_fn(val_preds['targets'], y)
+            val_loss += loss.item()
+    
+    val_loss = val_loss / len(test_dataloader)
+
+    mlflow.log_metric("test_loss", val_loss)
+
+    return val_loss
