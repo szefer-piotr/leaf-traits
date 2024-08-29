@@ -28,5 +28,11 @@ def create_pipeline(**kwargs) -> Pipeline:
             inputs=["instantiated_model","model_pth"],
             outputs="model",
             func=load_the_model_state_dict,
-        )
+        ),
+        node(
+            name="add_train_data_file_paths",
+            inputs=["test_raw","params:test_image_path"],
+            outputs="test_with_image_paths",
+            func=add_image_paths,
+        ),
     ])
