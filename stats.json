@@ -1,1 +1,1 @@
-{}
+{"train_df": {"rows": 55, "columns": 178, "file_size": 90587}, "val_df": {"rows": 223, "columns": 178, "file_size": 340735}}

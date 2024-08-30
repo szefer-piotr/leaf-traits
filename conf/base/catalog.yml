@@ -1,0 +1,29 @@
+train_raw:
+  type: pandas.CSVDataset
+  filepath: data/01_raw/train.csv
+
+test_raw:
+  type: pandas.CSVDataset
+  filepath: data/01_raw/test.csv
+
+train_with_image_paths:
+  type: pandas.CSVDataset
+  filepath:  data/02_intermediate/train_with_image_paths.csv"
+
+test_with_image_paths:
+  type: pandas.CSVDataset
+  filepath:  data/02_intermediate/test_with_image_paths.csv"
+
+train_df:
+  type: pandas.CSVDataset
+  filepath: data/05_model_input/train_df.csv
+
+val_df:
+  type: pandas.CSVDataset
+  filepath: data/05_model_input/val_df.csv
+
+figure:
+  type: matplotlib.MatplotlibWriter
+  filepath: data/08_reporting/train_validation_loss.png
+  save_args:
+    format: png

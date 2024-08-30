@@ -10,15 +10,17 @@ conf/**/*credentials*
 
 # ignore everything in the following folders
 data/**
+mlartifacts
+mlruns
 
 # except their sub-folders
-!data/**/
+# !data/**/
 
 # also keep all .gitkeep files
 !.gitkeep
 
 # keep also the example dataset
-!data/01_raw/*
+# !data/01_raw/*
 
 
 ##########################
