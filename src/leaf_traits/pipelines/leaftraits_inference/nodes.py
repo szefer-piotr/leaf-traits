@@ -79,12 +79,22 @@ def load_the_model_state_dict(
 
     return state_dict
 
-# def predict_target_using_model(
-#     model_instance: nn.Module,
-#     test_data: pd.DataFrame,
-#     evaluation_function: callable,
-# ):
-#     model_instance.eval()
-#     model_instance.pred
-#     with torch.inference_mode():
-#         model_instance(pd.DataFrame.to(device))
+def predict_target_using_model(
+    model_instance: nn.Module,
+    test_data: pd.DataFrame,
+    evaluation_function: callable,
+    device: torch.cuda.device,
+):
+    model_instance.eval()
+    with torch.inference_mode():
+        
+        test_data['image'], test_data['feature'], y = (
+            test_data['image'].to(device), 
+            test_data['feature'].to(device), 
+            y.to(device)
+            )
+        
+        predictions = model_instance(test_data)
+        metric = evaluation_function(predictions['targets'], y)
+
+        return metric

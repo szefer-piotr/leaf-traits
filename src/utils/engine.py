@@ -126,10 +126,10 @@ def train_model(
         In the form: {train_loss: [...], validation_loss: [...]}
     """
     
-    # results = {
-    #     'train_loss': [],
-    #     'validation_loss': []
-    # }
+    results = {
+        'train_loss': [],
+        'validation_loss': []
+    }
 
     for epoch in tqdm(range(epochs)):
         # print(epoch)
@@ -153,10 +153,12 @@ def train_model(
             f"val_loss: {val_loss:.4f} | "
         )
 
-        mlflow.log_metric('train_loss', train_loss)
-        mlflow.log_metric('validation_loss', val_loss)
+        # mlflow.log_metric(f"train_loss_{epoch}", train_loss)
+        # mlflow.log_metric(f"validation_loss_{epoch}", val_loss)
 
-        # results['train_loss'].append(train_loss)
-        # results['validation_loss'].append(val_loss)
+        results['train_loss'].append(train_loss)
+        results['validation_loss'].append(val_loss)
 
-    return model
+    # mlflow.log_artifact(results)
+
+    return (model, results)

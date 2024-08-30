@@ -30,7 +30,6 @@ from src.utils.engine import train_step, val_step, train_model
 
 def train_selected_model(
     model_name: str,
-    saved_model_name: str,
     train_df: pd.DataFrame,
     val_df: pd.DataFrame,
     target_columns: List,
@@ -38,7 +37,8 @@ def train_selected_model(
     feature_columns: List,
     device: torch.device,
     epochs: int = 3,
-    save_model_path: str = "/models/",
+    registered_model_name: str = "resnet_50_model",
+    artifact_path: str ="pytorch-model",
 ):
     models_dict = {
         "vit_concat": ViTModelConcat, 
@@ -78,7 +78,7 @@ def train_selected_model(
     weight_decay = 0.01, #CONFIG.WEIGHT_DECAY
     )
     
-    model_results = train_model(
+    model, model_results = train_model(
         model=model,
         train_dataloader=train_dataloader,
         val_dataloader=val_dataloader,
@@ -86,68 +86,96 @@ def train_selected_model(
         loss_fn=loss_fn,
         epochs=epochs,
         device=device)
-
+    
+    # Model gets logged in mlflow
     mlflow.pytorch.log_model(
-        pytorch_model=model_results, 
-        artifact_path="pytorch-model",
-        registered_model_name="resnet_50_model")
-
+        pytorch_model=model, 
+        artifact_path=artifact_path,
+        registered_model_name=registered_model_name)
+    
+    # Train and validation losses are forwarded to the next node
     return model_results
 
+def plot_loss_curves(results: Dict[str, List[float]]):
+    """Plots training curves of a results dictionary.
+    Args:
+        results (dict): dictionary containing list of values, e.g.
+            {"train_loss": [...],
+             "test_loss": [...]}
+    """
 
+    # Get the loss values of the results dictionary (training and test)
+    loss = results['train_loss']
+    val_loss = results['validation_loss']
 
-# TODO: modify this function such that it uses model obtained from get_registered_model_pth funciton and node
+    # Figure out how many epochs there were
+    epochs = range(len(results['train_loss']))
 
-def evaluate_model(
-    test_data: pd.DataFrame,
-    model: nn.Module,
-    target_columns: List,
-    feature_columns: List,
-    target_transformation: str,
-    test_batch_size: int,
-    device: torch.device,
-) -> float:
+    # Setup a plot 
+    fig, ax = plt.subplots(figsize=(15, 7))
+
+    # Plot loss
+    # plt.subplot(1, 2, 1)
+    plt.plot(epochs, loss, label='train_loss')
+    plt.plot(epochs, val_loss, label='validation_loss')
+    plt.title('Loss')
+    plt.xlabel('Epochs')
+    plt.legend()
+
+    mlflow.log_figure(fig, "train_val_loss.png")
+
+    return fig
+
+# def evaluate_model(
+#     test_data: pd.DataFrame,
+#     model: nn.Module,
+#     target_columns: List,
+#     feature_columns: List,
+#     target_transformation: str,
+#     test_batch_size: int,
+#     device: torch.device,
+# ) -> float:
     
-    model = model.to(device)
+#     model = model.to(device)
 
-    test_transformations, val_transformations = create_augmentations(
-        original_image_size= 512,
-        image_size=288
-        )
+#     test_transformations, val_transformations = create_augmentations(
+#         original_image_size= 512,
+#         image_size=288
+#         )
 
-    test_dataset = LTDataset(
-        test_data['file_path'].values,
-        test_data[target_columns].to_numpy(),
-        test_data[feature_columns].to_numpy(),
-        target_transformation,
-        test_transformations,
-    )
+#     test_dataset = LTDataset(
+#         test_data['file_path'].values,
+#         test_data[target_columns].to_numpy(),
+#         test_data[feature_columns].to_numpy(),
+#         target_transformation,
+#         test_transformations,
+#     )
 
-    test_dataloader = DataLoader(
-        test_dataset,
-        batch_size=test_batch_size,
-        drop_last=True,
-        num_workers=1,
-    )
+#     test_dataloader = DataLoader(
+#         test_dataset,
+#         batch_size=test_batch_size,
+#         drop_last=True,
+#         num_workers=1,
+#     )
 
-    target_medians = test_data[target_columns].median(axis=0).values
+#     target_medians = test_data[target_columns].median(axis=0).values
     
-    loss_fn = R2Loss(target_medians=target_medians, eps=1e-6)
+#     loss_fn = R2Loss(target_medians=target_medians, eps=1e-6)
     
-    model.eval()
+#     model.eval()
     
-    val_loss = 0
+#     val_loss = 0
     
-    with torch.inference_mode():
-        for batch, (X,y) in enumerate(test_dataloader):
-            # print(f"Batch: {batch}")
-            X['image'], X['feature'], y= X['image'].to(device), X['feature'].to(device), y.to(device)
-            val_preds = model(X)
-            loss = loss_fn(val_preds['targets'], y)
-            val_loss += loss.item()
+#     with torch.inference_mode():
+#         for batch, (X,y) in enumerate(test_dataloader):
+#             # print(f"Batch: {batch}")
+#             X['image'], X['feature'], y= X['image'].to(device), X['feature'].to(device), y.to(device)
+#             val_preds = model(X)
+#             loss = loss_fn(val_preds['targets'], y)
+#             val_loss += loss.item()
     
-    val_loss = val_loss / len(test_dataloader)
+#     val_loss = val_loss / len(test_dataloader)
 
-    mlflow.log_metric("test_loss", val_loss)
+#     mlflow.log_metric("test_loss", val_loss)
 
-    return val_loss
+#     return val_loss
