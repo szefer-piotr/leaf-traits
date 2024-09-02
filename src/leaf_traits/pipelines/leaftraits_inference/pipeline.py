@@ -10,7 +10,7 @@ def create_pipeline(**kwargs) -> Pipeline:
     return pipeline([
         node(
             name="get_registered_model",
-            inputs=[],
+            inputs=["params:registered_model_name"],
             outputs="model_pth",
             func=get_registered_model_pth,
         ),
@@ -25,7 +25,7 @@ def create_pipeline(**kwargs) -> Pipeline:
         ),
         node(
             name="load_the_model_state_dict",
-            inputs=["instantiated_model","model_pth"],
+            inputs="model_pth",
             outputs="model",
             func=load_the_model_state_dict,
         ),

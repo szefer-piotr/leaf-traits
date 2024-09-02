@@ -42,3 +42,4 @@ epochs: 3
 registered_model_name: "resnet_50_add_full"
 # artifact_path: '/home/piotr/leaf-traits/leaf-traits/mlruns/models'
 artifact_path: 'pytorch-model'
+registered_model_alias: "testing"

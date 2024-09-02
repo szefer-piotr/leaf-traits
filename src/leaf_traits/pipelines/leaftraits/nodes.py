@@ -16,6 +16,8 @@ from pathlib import Path
 from typing import Dict, Any, Callable, List
 from sklearn.model_selection import train_test_split
 
+from mlflow.client import MlflowClient
+
 from models.model_builders import (
     ViTModelAdd, 
     ViTModelConcat,
@@ -39,6 +41,7 @@ def train_selected_model(
     epochs: int = 3,
     registered_model_name: str = "resnet_50_model",
     artifact_path: str ="pytorch-model",
+    registered_model_alias: str = "testing",
 ):
     models_dict = {
         "vit_concat": ViTModelConcat, 
@@ -93,6 +96,15 @@ def train_selected_model(
         artifact_path=artifact_path,
         registered_model_name=registered_model_name)
     
+    client = MlflowClient()
+    mv = client.get_latest_versions(registered_model_name)
+    # print(f"[INFO] Latest model version of the {registered_model_name} is {type(mv)}")
+    
+    client.set_registered_model_alias(
+        registered_model_name, 
+        registered_model_alias, 
+        mv[0].version)
+    
     # Train and validation losses are forwarded to the next node
     return model_results
 
@@ -126,56 +138,56 @@ def plot_loss_curves(results: Dict[str, List[float]]):
 
     return fig
 
-# def evaluate_model(
-#     test_data: pd.DataFrame,
-#     model: nn.Module,
-#     target_columns: List,
-#     feature_columns: List,
-#     target_transformation: str,
-#     test_batch_size: int,
-#     device: torch.device,
-# ) -> float:
+def evaluate_model(
+    test_data: pd.DataFrame,
+    model: nn.Module,
+    target_columns: List,
+    feature_columns: List,
+    target_transformation: str,
+    test_batch_size: int,
+    device: torch.device,
+) -> float:
     
-#     model = model.to(device)
+    model = model.to(device)
 
-#     test_transformations, val_transformations = create_augmentations(
-#         original_image_size= 512,
-#         image_size=288
-#         )
+    test_transformations, val_transformations = create_augmentations(
+        original_image_size= 512,
+        image_size=288
+        )
 
-#     test_dataset = LTDataset(
-#         test_data['file_path'].values,
-#         test_data[target_columns].to_numpy(),
-#         test_data[feature_columns].to_numpy(),
-#         target_transformation,
-#         test_transformations,
-#     )
+    test_dataset = LTDataset(
+        test_data['file_path'].values,
+        test_data[target_columns].to_numpy(),
+        test_data[feature_columns].to_numpy(),
+        target_transformation,
+        test_transformations,
+    )
 
-#     test_dataloader = DataLoader(
-#         test_dataset,
-#         batch_size=test_batch_size,
-#         drop_last=True,
-#         num_workers=1,
-#     )
+    test_dataloader = DataLoader(
+        test_dataset,
+        batch_size=test_batch_size,
+        drop_last=True,
+        num_workers=1,
+    )
 
-#     target_medians = test_data[target_columns].median(axis=0).values
+    target_medians = test_data[target_columns].median(axis=0).values
     
-#     loss_fn = R2Loss(target_medians=target_medians, eps=1e-6)
+    loss_fn = R2Loss(target_medians=target_medians, eps=1e-6)
     
-#     model.eval()
+    model.eval()
     
-#     val_loss = 0
+    val_loss = 0
     
-#     with torch.inference_mode():
-#         for batch, (X,y) in enumerate(test_dataloader):
-#             # print(f"Batch: {batch}")
-#             X['image'], X['feature'], y= X['image'].to(device), X['feature'].to(device), y.to(device)
-#             val_preds = model(X)
-#             loss = loss_fn(val_preds['targets'], y)
-#             val_loss += loss.item()
+    with torch.inference_mode():
+        for batch, (X,y) in enumerate(test_dataloader):
+            # print(f"Batch: {batch}")
+            X['image'], X['feature'], y= X['image'].to(device), X['feature'].to(device), y.to(device)
+            val_preds = model(X)
+            loss = loss_fn(val_preds['targets'], y)
+            val_loss += loss.item()
     
-#     val_loss = val_loss / len(test_dataloader)
+    val_loss = val_loss / len(test_dataloader)
 
-#     mlflow.log_metric("test_loss", val_loss)
+    mlflow.log_metric("test_loss", val_loss)
 
-#     return val_loss
+    return val_loss

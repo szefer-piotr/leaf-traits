@@ -15,10 +15,10 @@ from models.model_builders import (
 
 def get_registered_model_pth(
     model_name: str ="resnet_50_model",
-    tag: str = "inference",
+    alias: str = "inference",
 ):
     client = MlflowClient()
-    model_info = client.get_model_version_by_alias(model_name, tag)
+    model_info = client.get_model_version_by_alias(model_name, alias)
     
     artifacts = client.list_artifacts(
         run_id=model_info.run_id, 
@@ -64,7 +64,6 @@ def instantiate_the_model(
 
 
 def load_the_model_state_dict(
-    model_instance: nn.Module,
     model_pth: str,
 ):
     """

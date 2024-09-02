@@ -7,7 +7,7 @@ from kedro.pipeline import Pipeline, pipeline, node
 
 from .nodes import (
     train_selected_model,
-    # evaluate_model,
+    evaluate_model,
     plot_loss_curves
 )
 
@@ -28,6 +28,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 "params:epochs",
                 "params:registered_model_name", 
                 "params:artifact_path",
+                "params:registered_model_alias"
             ],
             outputs="model_results",
             func=train_selected_model,
@@ -41,21 +42,21 @@ def create_pipeline(**kwargs) -> Pipeline:
         node(
             name="get_registered_model",
             inputs=[],
-            outputs="model_pth",
+            outputs="model",
             func=get_registered_model_pth,
         ),
-        # node(
-        #     name="evaluate_model",
-        #     inputs=[
-        #         "test_with_image_paths",
-        #         "model_pth",
-        #         "params:target_columns",
-        #         "params:feature_columns",
-        #         "target_transformation",
-        #         "test_batch_size",
-        #         "device",
-        #    ],
-        #    outputs="r2_fit",
-        #    func=evaluate_model,
-        # ),
+        node(
+            name="evaluate_model",
+            inputs=[
+                "test_with_image_paths",
+                "model",
+                "params:target_columns",
+                "params:feature_columns",
+                "target_transformation",
+                "test_batch_size",
+                "device",
+           ],
+           outputs="r2_fit",
+           func=evaluate_model,
+        ),
     ])
