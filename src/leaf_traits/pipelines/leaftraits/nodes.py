@@ -1,20 +1,12 @@
-"""
-This is a boilerplate pipeline 'leaftraits'
-generated using Kedro 0.19.6
-"""
-
-import fsspec
 import pandas as pd
 import torch
 import matplotlib.pyplot as plt
-import numpy as np
 import mlflow
 
 from torch import nn
 from torch.utils.data import DataLoader
-from pathlib import Path
-from typing import Dict, Any, Callable, List
-from sklearn.model_selection import train_test_split
+from typing import Dict, List
+from torchmetrics.regression import R2Score
 
 from mlflow.client import MlflowClient
 
@@ -104,9 +96,9 @@ def train_selected_model(
         registered_model_name, 
         registered_model_alias, 
         mv[0].version)
-    
+
     # Train and validation losses are forwarded to the next node
-    return model_results
+    return model_results, model
 
 def plot_loss_curves(results: Dict[str, List[float]]):
     """Plots training curves of a results dictionary.
@@ -138,22 +130,23 @@ def plot_loss_curves(results: Dict[str, List[float]]):
 
     return fig
 
-def evaluate_model(
+def score_model(
     test_data: pd.DataFrame,
     model: nn.Module,
     target_columns: List,
     feature_columns: List,
     target_transformation: str,
-    test_batch_size: int,
     device: torch.device,
 ) -> float:
     
     model = model.to(device)
 
-    test_transformations, val_transformations = create_augmentations(
+    test_transformations, _ = create_augmentations(
         original_image_size= 512,
         image_size=288
         )
+    
+    print(f"[INFO] Test transformations created...")
 
     test_dataset = LTDataset(
         test_data['file_path'].values,
@@ -163,31 +156,33 @@ def evaluate_model(
         test_transformations,
     )
 
+    print(f"[INFO] Test dataset created...")
+
     test_dataloader = DataLoader(
         test_dataset,
-        batch_size=test_batch_size,
+        batch_size=8,
         drop_last=True,
         num_workers=1,
     )
 
-    target_medians = test_data[target_columns].median(axis=0).values
-    
-    loss_fn = R2Loss(target_medians=target_medians, eps=1e-6)
-    
+    print(f"[INFO] Test dataloader created...")
+
+    # Log metrics for the model
+    r2score = R2Score(num_outputs=6).to(device)
+
     model.eval()
     
-    val_loss = 0
+    val_score = 0
     
     with torch.inference_mode():
-        for batch, (X,y) in enumerate(test_dataloader):
-            # print(f"Batch: {batch}")
+        for _, (X,y) in enumerate(test_dataloader):
             X['image'], X['feature'], y= X['image'].to(device), X['feature'].to(device), y.to(device)
             val_preds = model(X)
-            loss = loss_fn(val_preds['targets'], y)
-            val_loss += loss.item()
+            val_score = r2score(val_preds['targets'], y)    
+            val_score += val_score.item()
     
-    val_loss = val_loss / len(test_dataloader)
+    val_score = val_score / len(test_dataloader)
 
-    mlflow.log_metric("test_loss", val_loss)
+    mlflow.log_metric("validation_score", val_score)
 
-    return val_loss
+    return val_score

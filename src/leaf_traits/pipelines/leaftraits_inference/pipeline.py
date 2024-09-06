@@ -3,8 +3,7 @@ The inference pipeline will take the figure and/or auxillary environmental data 
 """
 
 from kedro.pipeline import Pipeline, pipeline, node
-from .nodes import get_registered_model_pth, instantiate_the_model, load_the_model_state_dict
-from src.leaf_traits.pipelines.data_processing.nodes import add_image_paths
+from .nodes import get_registered_model_pth, instantiate_the_model, load_model_state_dict, predict_target_using_model
 
 def create_pipeline(**kwargs) -> Pipeline:
     return pipeline([
@@ -27,12 +26,12 @@ def create_pipeline(**kwargs) -> Pipeline:
             name="load_the_model_state_dict",
             inputs="model_pth",
             outputs="model",
-            func=load_the_model_state_dict,
+            func=load_model_state_dict,
         ),
-        node(
-            name="add_train_data_file_paths",
-            inputs=["test_raw","params:test_image_path"],
-            outputs="test_with_image_paths",
-            func=add_image_paths,
-        ),
+        # node(
+        #     name="predict_target_using_model",
+        #     inputs="model_request",
+        #     outputs="model_response",
+        #     func=predict_target_using_model
+        # ),
     ])

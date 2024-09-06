@@ -63,7 +63,7 @@ def instantiate_the_model(
     return model
 
 
-def load_the_model_state_dict(
+def load_model_state_dict(
     model_pth: str,
 ):
     """
@@ -95,5 +95,21 @@ def predict_target_using_model(
         
         predictions = model_instance(test_data)
         metric = evaluation_function(predictions['targets'], y)
+    
+    return metric
+    
+def get_example_request_from_test_set(
+    model: nn.Module,
+    test_set: pd.DataFrame,
+    predict_rows: int,
+) -> dict:
+    
+    # Apply transformations
+    
 
-        return metric
+    # Convert to tensor
+    torch.tensor(test_set)
+
+    model.eval()
+    with torch.inference_mode():
+        predictions = model(test_set)
