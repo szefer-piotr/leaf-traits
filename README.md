@@ -5,7 +5,7 @@ This is an implementation of my solution to the Kaggle competition:
 ## How to start
 
 ```
-export = PYTHONPATH=.
+export PYTHONPATH=.
 ```
 To allow for the mlflow integration run
 
